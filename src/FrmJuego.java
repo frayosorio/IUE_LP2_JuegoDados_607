@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.DataBufferDouble;
+import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -12,6 +14,10 @@ import javax.swing.WindowConstants;
 
 public class FrmJuego extends JFrame {
 
+    Dado dado1, dado2;
+    Random r = new Random();
+    JLabel lblDado1, lblDado2;
+
     // metodo constructor
     public FrmJuego() {
         setSize(500, 300);
@@ -21,12 +27,12 @@ public class FrmJuego extends JFrame {
         String nombreArchivo = "/imagenes/1.jpg";
         ImageIcon imgDado = new ImageIcon(getClass().getResource(nombreArchivo));
 
-        JLabel lblDado1 = new JLabel();
+        lblDado1 = new JLabel();
         lblDado1.setIcon(imgDado);
         lblDado1.setBounds(10, 10, imgDado.getIconWidth(), imgDado.getIconHeight());
         getContentPane().add(lblDado1);
 
-        JLabel lblDado2 = new JLabel();
+        lblDado2 = new JLabel();
         lblDado2.setIcon(imgDado);
         lblDado2.setBounds(10 + imgDado.getIconWidth(), 10, imgDado.getIconWidth(), imgDado.getIconHeight());
         getContentPane().add(lblDado2);
@@ -80,6 +86,9 @@ public class FrmJuego extends JFrame {
                 lanzar();
             }
         });
+        // instanciar los objetos dado
+        dado1 = new Dado();
+        dado2 = new Dado();
     }
 
     private void iniciar() {
@@ -87,6 +96,10 @@ public class FrmJuego extends JFrame {
     }
 
     private void lanzar() {
+        dado1.lanzar(r);
+        dado1.mostrar(lblDado1);
 
+        dado2.lanzar(r);
+        dado2.mostrar(lblDado2);
     }
 }
