@@ -3,6 +3,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.DataBufferDouble;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -12,11 +14,14 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import javazoom.jl.player.Player;
+
 public class FrmJuego extends JFrame {
 
     Dado dado1, dado2;
     Random r = new Random();
-    JLabel lblDado1, lblDado2;
+    JLabel lblDado1, lblDado2, lblLanzamientos, lblCenas;
+    int lanzamientos, cenas;
 
     // metodo constructor
     public FrmJuego() {
@@ -47,7 +52,7 @@ public class FrmJuego extends JFrame {
         lblTituloCenas.setHorizontalAlignment(SwingConstants.CENTER);
         getContentPane().add(lblTituloCenas);
 
-        JLabel lblLanzamientos = new JLabel("0");
+        lblLanzamientos = new JLabel("0");
         lblLanzamientos.setBounds(30 + 2 * imgDado.getIconWidth(), 40, 100, 100);
         lblLanzamientos.setHorizontalAlignment(SwingConstants.RIGHT);
         lblLanzamientos.setFont(new Font("Tahoma", 1, 72));
@@ -56,7 +61,7 @@ public class FrmJuego extends JFrame {
         lblLanzamientos.setForeground(new Color(51, 255, 0));
         getContentPane().add(lblLanzamientos);
 
-        JLabel lblCenas = new JLabel("0");
+        lblCenas = new JLabel("0");
         lblCenas.setBounds(150 + 2 * imgDado.getIconWidth(), 40, 100, 100);
         lblCenas.setHorizontalAlignment(SwingConstants.RIGHT);
         lblCenas.setFont(new Font("Tahoma", 1, 72));
@@ -89,10 +94,21 @@ public class FrmJuego extends JFrame {
         // instanciar los objetos dado
         dado1 = new Dado();
         dado2 = new Dado();
+        // iniciar los contadores
+        lanzamientos = 0;
+        cenas = 0;
     }
 
     private void iniciar() {
+        // iniciar los contadores
+        lanzamientos = 0;
+        cenas = 0;
+        // mostrar los contadores
+        lblLanzamientos.setText("0");
+        lblCenas.setText("0");
 
+        // sonido de inicio de lanzamientos
+        ReproductorAudio.reproducir("iniciar");
     }
 
     private void lanzar() {
@@ -101,5 +117,18 @@ public class FrmJuego extends JFrame {
 
         dado2.lanzar(r);
         dado2.mostrar(lblDado2);
+
+        getContentPane().repaint();
+        dado1.sonar();
+
+        lanzamientos++;
+        lblLanzamientos.setText(String.valueOf(lanzamientos));
+
+        if (dado1.getNumero() + dado2.getNumero() >= 11) {
+            cenas++;
+            lblCenas.setText(String.valueOf(cenas));
+            // sonido de cenas
+            ReproductorAudio.reproducir("cenas");
+        }
     }
 }

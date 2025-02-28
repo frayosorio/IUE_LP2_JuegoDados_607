@@ -17,4 +17,12 @@ public class Dado {
         lbl.setIcon(imgDado);
     }
 
+    public int getNumero() {
+        return numero;
+    }
+
+    public void sonar() {
+        ReproductorAudio.reproducir("LanzarDados");
+    }
+
 }
